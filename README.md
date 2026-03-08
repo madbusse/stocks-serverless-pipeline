@@ -156,3 +156,70 @@ View logs in CloudWatch:
 - Log group: `/aws/lambda/stocks-pipeline-ingestion-dev`
 - Log group: `/aws/lambda/stocks-pipeline-retrieval-dev`
 
+## Troubleshooting
+
+### Frontend shows "No data available"
+
+**Cause:** DynamoDB table is empty (ingestion Lambda only runs daily at 4:15 PM ET)
+
+**Solution:** Manually trigger the ingestion Lambda:
+```bash
+cd terraform
+aws lambda invoke --function-name $(terraform output -raw ingestion_lambda_name) \
+  --region $(terraform output -raw aws_region) \
+  response.json
+cat response.json
+```
+
+Or use the helper script:
+```bash
+./trigger-ingestion.sh
+```
+
+### API returns empty array
+
+**Check if data exists in DynamoDB:**
+```bash
+cd terraform
+aws dynamodb scan --table-name $(terraform output -raw dynamodb_table_name) \
+  --region $(terraform output -raw aws_region)
+```
+
+### Frontend shows API error
+
+**Test API directly:**
+```bash
+cd terraform
+curl $(terraform output -raw api_endpoint)/movers
+```
+
+**Check if API endpoint was correctly deployed:**
+```bash
+cd terraform
+terraform output api_endpoint
+# Verify this matches the URL in your deployed frontend
+```
+
+### Lambda not found error
+
+**Verify region matches:**
+```bash
+cd terraform
+terraform output aws_region
+aws configure get region
+```
+
+If they don't match, update your AWS CLI default region or specify `--region` in commands.
+
+### Check Lambda logs
+
+**Ingestion Lambda:**
+```bash
+aws logs tail /aws/lambda/stocks-pipeline-ingestion-dev --follow
+```
+
+**Retrieval Lambda:**
+```bash
+aws logs tail /aws/lambda/stocks-pipeline-retrieval-dev --follow
+```
+

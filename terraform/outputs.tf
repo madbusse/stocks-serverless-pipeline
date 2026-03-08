@@ -3,6 +3,11 @@ output "dynamodb_table_name" {
   value       = aws_dynamodb_table.stock_movers.name
 }
 
+output "aws_region" {
+  description = "AWS region where resources are deployed"
+  value       = var.aws_region
+}
+
 output "api_endpoint" {
   description = "API Gateway endpoint URL"
   value       = aws_apigatewayv2_api.stock_api.api_endpoint

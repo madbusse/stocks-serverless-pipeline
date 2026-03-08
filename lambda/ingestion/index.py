@@ -4,6 +4,7 @@ import boto3
 import time
 from datetime import datetime, timedelta
 from urllib import request, error
+from decimal import Decimal
 
 WATCHLIST = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA']
 FINNHUB_API_KEY = os.environ['FINNHUB_API_KEY']
@@ -57,8 +58,8 @@ def handler(event, context):
             percent_change = ((close_price - open_price) / open_price) * 100
             movers.append({
                 'ticker': ticker,
-                'percentChange': round(percent_change, 2),
-                'closingPrice': round(close_price, 2),
+                'percentChange': Decimal(str(round(percent_change, 2))),
+                'closingPrice': Decimal(str(round(close_price, 2))),
                 'absChange': abs(percent_change)
             })
             print(f'{ticker}: {percent_change:.2f}%')
@@ -91,7 +92,7 @@ def handler(event, context):
         'body': json.dumps({
             'date': yesterday,
             'topMover': top_mover['ticker'],
-            'percentChange': top_mover['percentChange'],
+            'percentChange': float(top_mover['percentChange']),
             'successfulTickers': len(movers),
             'failedTickers': failed_tickers
         })
