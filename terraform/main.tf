@@ -147,14 +147,15 @@ resource "aws_lambda_permission" "allow_eventbridge" {
   source_arn    = aws_cloudwatch_event_rule.daily_stock_ingestion.arn
 }
 
-# Retrieval Lambda (placeholder)
+# Retrieval Lambda
 resource "aws_lambda_function" "stock_retrieval" {
-  filename      = "lambda_placeholder.zip"
+  filename      = "../lambda/retrieval.zip"
   function_name = "${var.project_name}-retrieval-${var.environment}"
   role          = aws_iam_role.retrieval_lambda_role.arn
   handler       = "index.handler"
   runtime       = "python3.11"
   timeout       = 30
+  source_code_hash = filebase64sha256("../lambda/retrieval.zip")
 
   environment {
     variables = {
