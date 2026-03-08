@@ -16,7 +16,7 @@ variable "project_name" {
   default     = "stocks-pipeline"
 }
 
-variable "stock_api_key" {
+variable "finnhub_api_key" {
   description = "API key for stock data provider"
   type        = string
   sensitive   = true

@@ -108,28 +108,29 @@ resource "aws_iam_role_policy_attachment" "retrieval_lambda_logs" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# Ingestion Lambda (placeholder)
+# Ingestion Lambda
 resource "aws_lambda_function" "stock_ingestion" {
-  filename      = "lambda_placeholder.zip"
+  filename      = "../lambda/ingestion.zip"
   function_name = "${var.project_name}-ingestion-${var.environment}"
   role          = aws_iam_role.ingestion_lambda_role.arn
   handler       = "index.handler"
   runtime       = "python3.11"
   timeout       = 60
+  source_code_hash = filebase64sha256("../lambda/ingestion.zip")
 
   environment {
     variables = {
       DYNAMODB_TABLE = aws_dynamodb_table.stock_movers.name
-      STOCK_API_KEY  = var.stock_api_key
+      FINNHUB_API_KEY  = var.finnhub_api_key
     }
   }
 }
 
-# EventBridge Rule for Daily Trigger
+# EventBridge Rule for Daily Trigger (4:15 PM ET = 9:15 PM UTC)
 resource "aws_cloudwatch_event_rule" "daily_stock_ingestion" {
   name                = "${var.project_name}-daily-ingestion-${var.environment}"
-  description         = "Trigger stock ingestion Lambda daily"
-  schedule_expression = "cron(0 22 * * ? *)"
+  description         = "Trigger stock ingestion Lambda daily at 4:15 PM ET"
+  schedule_expression = "cron(15 21 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "lambda_target" {

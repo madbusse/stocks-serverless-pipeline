@@ -23,7 +23,7 @@ The Stock API key is stored as a Terraform variable and passed to Lambda as an e
 
 2. Edit `terraform.tfvars` with your API key:
    ```hcl
-   stock_api_key = "your-actual-api-key"
+   finnhub_api_key = "your-actual-api-key"
    ```
 
 3. Never commit `terraform.tfvars` to version control
