@@ -23,8 +23,8 @@
             background-image: url('https://st4.depositphotos.com/12659858/23908/i/450/depositphotos_239087274-stock-photo-rendering-stock-indexes-virtual-space.jpg');
             background-size: cover;
             background-position: center;
-            opacity: 0.5; /* 50% Opacity */
-            z-index: -1; /* Puts it behind your table and text */
+            opacity: 0.5;
+            z-index: -1;
         }
         h1 {
             color: #0f0;
@@ -35,8 +35,36 @@
         }
         .subtitle {
             color: #888;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             font-size: 14px;
+        }
+        .volatile-stock {
+            color: #ff0;
+            margin-bottom: 30px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #0c0;
+        }
+        button:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
         }
         table {
             width: 100%;
@@ -75,32 +103,73 @@
 </head>
 <body>
     <h1>STOCK TOP MOVERS</h1>
-    <p class="subtitle">7-Day History of Daily Top Movers</p>
+    <p class="subtitle">Historical Daily Top Movers</p>
+    <div class="volatile-stock" id="volatileStock"></div>
+    <div class="controls">
+        <button id="show7Days" disabled>Show 7 Days</button>
+        <button id="show30Days">Show 30 Days</button>
+    </div>
     <div id="content">
         <div class="loading">Loading data...</div>
     </div>
 
     <script>
         const API_ENDPOINT = 'API_ENDPOINT_PLACEHOLDER';
+        let allData = [];
+        let currentView = 7;
 
         async function fetchMovers() {
             try {
                 const response = await fetch(`${API_ENDPOINT}/movers`);
                 if (!response.ok) throw new Error('Failed to fetch data');
-                const data = await response.json();
-                displayMovers(data);
+                allData = await response.json();
+                displayMovers(7);
             } catch (error) {
                 document.getElementById('content').innerHTML = 
                     `<div class="error">Error loading data: ${error.message}</div>`;
             }
         }
 
-        function displayMovers(movers) {
-            if (!movers || movers.length === 0) {
+        function calculateMostVolatile(days) {
+            const dataToAnalyze = allData.slice(0, days);
+            const tickerCount = {};
+            
+            dataToAnalyze.forEach(item => {
+                tickerCount[item.ticker] = (tickerCount[item.ticker] || 0) + 1;
+            });
+            
+            let mostVolatile = '';
+            let maxCount = 0;
+            
+            for (const [ticker, count] of Object.entries(tickerCount)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    mostVolatile = ticker;
+                }
+            }
+            
+            return { ticker: mostVolatile, count: maxCount };
+        }
+
+        function displayMovers(days) {
+            currentView = days;
+            
+            // Update buttons
+            document.getElementById('show7Days').disabled = (days === 7);
+            document.getElementById('show30Days').disabled = (days === 30);
+            
+            if (!allData || allData.length === 0) {
                 document.getElementById('content').innerHTML = 
                     '<div class="loading">No data available</div>';
                 return;
             }
+
+            const movers = allData.slice(0, days);
+            const volatile = calculateMostVolatile(days);
+            
+            // Display most volatile stock
+            document.getElementById('volatileStock').innerHTML = 
+                `Most volatile over the past ${days} days: <span style="color: #ff0;">${volatile.ticker}</span> (${volatile.count} appearances)`;
 
             const table = `
                 <table>
@@ -128,6 +197,10 @@
             `;
             document.getElementById('content').innerHTML = table;
         }
+
+        // Event listeners
+        document.getElementById('show7Days').addEventListener('click', () => displayMovers(7));
+        document.getElementById('show30Days').addEventListener('click', () => displayMovers(30));
 
         fetchMovers();
     </script>
