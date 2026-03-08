@@ -1,6 +1,6 @@
-# 📈 Stocks Serverless Pipeline
+# Stocks Serverless Pipeline
 
-Automated serverless pipeline that tracks tech stock movements, identifies daily top movers, and displays 7-day history via a public dashboard.
+Automated serverless pipeline that tracks tech stock movements, identifies daily top movers, and displays 7 or 30 day history via a public dashboard, current version available [here](http://stocks-pipeline-frontend-dev-058264078572.s3-website-us-east-1.amazonaws.com/).
 
 ## Architecture
 
