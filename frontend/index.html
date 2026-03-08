@@ -7,70 +7,77 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            font-family: 'Courier New', Courier, monospace;
+            background: #000;
+            color: #0f0;
             padding: 40px;
+            min-height: 100vh;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://st4.depositphotos.com/12659858/23908/i/450/depositphotos_239087274-stock-photo-rendering-stock-indexes-virtual-space.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.5; /* 50% Opacity */
+            z-index: -1; /* Puts it behind your table and text */
         }
         h1 {
-            color: #333;
+            color: #0f0;
             margin-bottom: 10px;
-            font-size: 28px;
+            font-size: 48px;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
         .subtitle {
-            color: #666;
+            color: #888;
             margin-bottom: 30px;
             font-size: 14px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            border: 1px solid #333;
         }
         th {
-            background: #f8f9fa;
+            background: #111;
             padding: 12px;
             text-align: left;
-            font-weight: 600;
-            color: #495057;
-            border-bottom: 2px solid #dee2e6;
+            font-weight: bold;
+            color: #0f0;
+            border: 1px solid #333;
         }
         td {
             padding: 12px;
-            border-bottom: 1px solid #e9ecef;
+            border: 1px solid #333;
+            color: #fff;
         }
-        tr:hover { background: #f8f9fa; }
-        .positive { color: #28a745; font-weight: 600; }
-        .negative { color: #dc3545; font-weight: 600; }
-        .ticker { font-weight: 600; color: #495057; }
+        tr:hover { background: #111; }
+        .positive { color: #0f0; font-weight: bold; }
+        .negative { color: #f00; font-weight: bold; }
+        .ticker { font-weight: bold; color: #fff; }
         .loading {
-            text-align: center;
             padding: 40px;
-            color: #666;
+            color: #888;
         }
         .error {
-            background: #f8d7da;
-            color: #721c24;
+            background: #300;
+            color: #f00;
             padding: 12px;
-            border-radius: 6px;
+            border: 1px solid #f00;
             margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📈 Stock Top Movers</h1>
-        <p class="subtitle">7-Day History of Daily Top Movers</p>
-        <div id="content">
-            <div class="loading">Loading data...</div>
-        </div>
+    <h1>STOCK TOP MOVERS</h1>
+    <p class="subtitle">7-Day History of Daily Top Movers</p>
+    <div id="content">
+        <div class="loading">Loading data...</div>
     </div>
 
     <script>
@@ -99,10 +106,10 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Ticker</th>
-                            <th>% Change</th>
-                            <th>Closing Price</th>
+                            <th>DATE</th>
+                            <th>TICKER</th>
+                            <th>% CHANGE</th>
+                            <th>CLOSING PRICE</th>
                         </tr>
                     </thead>
                     <tbody>
