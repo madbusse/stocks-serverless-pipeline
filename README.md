@@ -139,6 +139,7 @@ terraform destroy
 
 - **API Limits**: Finnhub free tier = 60 requests/day (using 6/day)
 - **Timing**: Runs at 4:15 PM ET to allow market data to finalize
+- **Market Hours**: Automatically skips execution on weekends and US market holidays
 - **Storage**: DynamoDB on-demand pricing (cost-effective for low volume)
 - **Frontend**: Plain HTML/JS (no build step, instant deployment)
 - **Error Handling**: Partial failures don't crash the run; logs to CloudWatch
