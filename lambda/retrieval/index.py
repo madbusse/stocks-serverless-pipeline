@@ -15,7 +15,7 @@ def decimal_to_float(obj):
 
 def handler(event, context):
     try:
-        dates = [(datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(1, 8)]
+        dates = [(datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(1, 31)]
         
         items = []
         for date in dates:
