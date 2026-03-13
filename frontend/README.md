@@ -1,13 +1,13 @@
 # Frontend Dashboard
 
 ## Overview
-Minimal SPA that displays 7-day history of daily top stock movers.
+Minimal SPA that displays 7- or 30- day history of daily top stock movers.
 
 ## Features
 - Fetches data from GET /movers API endpoint
 - Table view with Date, Ticker, % Change, Closing Price
-- 🟢 Green for positive gains
-- 🔴 Red for negative losses
+- Green for positive gains
+- Red for negative losses
 - Responsive design
 
 ## Deployment

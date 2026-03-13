@@ -19,5 +19,5 @@ echo ""
 rm response.json
 
 echo ""
-echo "✅ Lambda triggered. Check CloudWatch logs for details."
+echo "Lambda triggered. Check CloudWatch logs for details."
 echo "Wait a few seconds, then refresh your frontend."

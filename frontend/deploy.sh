@@ -24,5 +24,5 @@ aws s3 cp ../frontend/index_deploy.html s3://$BUCKET_NAME/index.html --content-t
 # Clean up
 rm ../frontend/index_deploy.html
 
-echo "✅ Frontend deployed to S3"
-echo "🌐 URL: http://$(terraform output -raw frontend_url)"
+echo "Frontend deployed to S3"
+echo "URL: http://$(terraform output -raw frontend_url)"

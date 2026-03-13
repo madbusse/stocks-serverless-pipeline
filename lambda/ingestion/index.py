@@ -10,12 +10,10 @@ WATCHLIST = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA']
 FINNHUB_API_KEY = os.environ['FINNHUB_API_KEY']
 DYNAMODB_TABLE = os.environ['DYNAMODB_TABLE']
 
-# US Market holidays 2024-2025 (NYSE)
+# TODO: enable dynamic holiday fetching
 MARKET_HOLIDAYS = [
-    '2024-01-01', '2024-01-15', '2024-02-19', '2024-03-29', '2024-05-27',
-    '2024-06-19', '2024-07-04', '2024-09-02', '2024-11-28', '2024-12-25',
-    '2025-01-01', '2025-01-20', '2025-02-17', '2025-04-18', '2025-05-26',
-    '2025-06-19', '2025-07-04', '2025-09-01', '2025-11-27', '2025-12-25'
+    '2026-01-01', '2026-01-19', '2026-02-16', '2026-04-03', '2026-05-25',
+    '2026-06-19', '2026-07-03', '2026-09-07', '2026-11-26', '2026-12-25'
 ]
 
 dynamodb = boto3.resource('dynamodb')
@@ -25,11 +23,9 @@ def is_market_open():
     now = datetime.now()
     date_str = now.strftime('%Y-%m-%d')
     
-    # Check if weekend
-    if now.weekday() >= 5:  # Saturday=5, Sunday=6
+    if now.weekday() >= 5:  # weekends (market closed)
         return False
     
-    # Check if holiday
     if date_str in MARKET_HOLIDAYS:
         return False
     
@@ -60,7 +56,6 @@ def fetch_with_retry(url, max_retries=3):
     raise Exception('Max retries exceeded')
 
 def handler(event, context):
-    # Check if market is open
     if not is_market_open():
         print('Market is closed (weekend or holiday). Skipping execution.')
         return {

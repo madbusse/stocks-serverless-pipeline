@@ -154,7 +154,7 @@
         function displayMovers(days) {
             currentView = days;
             
-            // Update buttons
+            // Toggle between 7 and 30 days
             document.getElementById('show7Days').disabled = (days === 7);
             document.getElementById('show30Days').disabled = (days === 30);
             
@@ -198,7 +198,6 @@
             document.getElementById('content').innerHTML = table;
         }
 
-        // Event listeners
         document.getElementById('show7Days').addEventListener('click', () => displayMovers(7));
         document.getElementById('show30Days').addEventListener('click', () => displayMovers(30));
 
